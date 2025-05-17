@@ -5,13 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-@Table(name = "favorite_study_room")
-public class FavoriteStudyRoomEntity {
+@Table(name = "seat")
+public class SeatEntity {
     @Id @GeneratedValue
-    @Column(name = "favorite_study_room_id")
+    @Column(name = "seat_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -27,4 +29,19 @@ public class FavoriteStudyRoomEntity {
 
     @Column(name = "building_id", nullable = false)
     private Long buildingId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "seat_status", nullable = false)
+    private SeatStatus status = SeatStatus.possible;
+
+    @Column(name = "seat_start_time")
+    private LocalDateTime startTime;
+
+    @Column(name = "seat_end_time")
+    private LocalDateTime endTime;
+
+    public enum SeatStatus {
+        possible,
+        impossible
+    }
 }
