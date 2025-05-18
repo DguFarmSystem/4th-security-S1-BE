@@ -25,11 +25,11 @@ public class NoticeEntity {
     private LocalDateTime createdAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_id", nullable = false)
+    @JoinColumn(name = "admin_id", nullable = false) // 외래키 설정
     private AdminEntity admin;
 
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
-    }
+    } // 작성일 자동 저장
 }
