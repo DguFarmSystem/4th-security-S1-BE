@@ -1,5 +1,6 @@
 package com.farmsystem.sprout.domain.entity;
 
+import com.farmsystem.sprout.domain.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,28 +13,28 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-@Table(name = "user")
+@Table(name = "users")
 public class UserEntity {
     @Id @GeneratedValue
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "user_login_id", nullable = false, length = 20)
-    private String loginId;
+    @Column(name = "username", nullable = false, length = 20, unique = true)
+    private String username;
 
-    @Column(name = "user_name", nullable = false, length = 20)
-    private String name;
+    @Column(name = "full_name", nullable = false, length = 20)
+    private String fullName;
 
-    @Column(name = "user_email", length = 50)
+    @Column(name = "email", length = 50, unique = true)
     private String email;
 
-    @Column(name = "user_password", nullable = false, length = 20)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "user_created_date", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_date", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdDate;
 
-    @Column(name = "user_updated_date")
+    @Column(name = "updated_date")
     private LocalDateTime updatedDate;
 
     @PrePersist
@@ -47,13 +48,10 @@ public class UserEntity {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_role", nullable = false)
-    private Role isAdmin = Role.user;
+    @Column(name = "role", nullable = false)
+    private UserRole role = UserRole.USER;
 
-    public enum Role {
-        user,
-        admin
-    }
+    private boolean enabled = true;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private AdminEntity admin;
