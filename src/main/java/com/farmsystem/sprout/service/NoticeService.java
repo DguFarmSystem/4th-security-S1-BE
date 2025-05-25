@@ -34,5 +34,12 @@ public class NoticeService {
         return saved.getId();
     }
 
+    public List<NoticeResponseDto> getRecentNotices(int count) {
+        List<NoticeEntity> notices = noticeRepository.findTop3ByOrderByCreatedAtDesc();
+        return notices.stream()
+                .map(NoticeResponseDto::from)
+                .collect(Collectors.toList());
+    }
+
 }
 

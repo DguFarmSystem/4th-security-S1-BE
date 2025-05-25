@@ -33,4 +33,10 @@ public class NoticeController {
                 .body("공지사항 등록 완료! ID: " + id);
     }
 
+    // 최근 공지사항 3개 조회 (메인페이지용)
+    @GetMapping("/main")
+    public ResponseEntity<List<NoticeResponseDto>> getRecentNoticesForMain() {
+        List<NoticeResponseDto> recentNotices = noticeService.getRecentNotices(3); // 최근 공지사항 3개
+        return ResponseEntity.ok(recentNotices);
+    }
 }
