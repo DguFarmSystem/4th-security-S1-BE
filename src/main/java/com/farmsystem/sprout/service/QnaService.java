@@ -1,11 +1,14 @@
 package com.farmsystem.sprout.service;
 
 import com.farmsystem.sprout.domain.entity.QnaEntity;
+import com.farmsystem.sprout.dto.response.QnaResponseDto;
 import com.farmsystem.sprout.repository.QnaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class QnaService {
@@ -22,6 +25,15 @@ public class QnaService {
         return qnaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Q&A가 존재하지 않습니다."));
     }
+
+    // 메인페이지에서 Q&A 조회
+    public List<QnaResponseDto> getRecentQna(int count) {
+        List<QnaEntity> recentQna = qnaRepository.findTop3ByOrderByCreatedAtDesc();
+        return recentQna.stream()
+                .map(QnaResponseDto::from)
+                .collect(Collectors.toList());
+    }
+
 }
 
 

@@ -7,6 +7,7 @@ import com.farmsystem.sprout.dto.response.QnaReplyResponseDto;
 import com.farmsystem.sprout.dto.response.QnaResponseDto;
 import com.farmsystem.sprout.repository.QnaRepository;
 import com.farmsystem.sprout.repository.UserRepository;
+import com.farmsystem.sprout.service.QnaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,8 @@ public class QnaUserController {
 
     private final QnaRepository qnaRepository;
     private final UserRepository userRepository;
+    private final QnaService qnaService;
+
 
     // 사용자 질문 등록
     @PostMapping
@@ -41,7 +44,7 @@ public class QnaUserController {
     @GetMapping
     public ResponseEntity<Page<QnaResponseDto>> getPagedQna(Pageable pageable) {
         Page<QnaEntity> page = qnaRepository.findAll(pageable);
-        Page<QnaResponseDto> dtoPage = page.map(QnaResponseDto::new);
+        Page<QnaResponseDto> dtoPage = page.map(QnaResponseDto::from);
         return ResponseEntity.ok(dtoPage);
     }
 
@@ -67,4 +70,8 @@ public class QnaUserController {
         return ResponseEntity.ok(new QnaReplyResponseDto(qna.getReply()));
     }
 
+    @GetMapping("/main")
+    public ResponseEntity<List<QnaResponseDto>> getRecentFaq() {
+        return ResponseEntity.ok(qnaService.getRecentQna(3));
+    }
 }
